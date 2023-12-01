@@ -1,7 +1,4 @@
-use super::get_input;
-
-pub fn run() {
-    let input = get_input(1);
+pub fn run(input: String) {
     let lines = input.as_str().lines();
     let mut total: u32 = 0;
     for line in lines {
@@ -24,8 +21,7 @@ pub fn run() {
     println!("{total}");
 }
 
-pub fn runtwo() {
-    let input = get_input(1);
+pub fn runtwo(input: String) {
     let lines = input.as_str().lines();
     let mut total: u32 = 0;
     for line in lines {
