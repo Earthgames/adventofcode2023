@@ -1,5 +1,3 @@
-use std::usize;
-
 pub fn run(input: String) {
     let lines = input.as_str().lines();
     let mut engine: Vec<Vec<char>> =
@@ -24,6 +22,32 @@ pub fn run(input: String) {
                 }
             } else {
                 not_checked = true;
+            }
+        }
+    }
+    println!("{}", total);
+}
+
+pub fn runtwo(input: String) {
+    let lines = input.as_str().lines();
+    let mut engine: Vec<Vec<char>> =
+        vec![vec!['.'; lines.clone().next().unwrap().len()]; lines.clone().count()];
+    let mut total: u32 = 0;
+
+    // create 2d vector
+    for (y, line) in lines.enumerate() {
+        for (x, character) in line.chars().enumerate() {
+            engine[y][x] = character;
+        }
+    }
+
+    for (y, row) in engine.iter().enumerate() {
+        for (x, column) in row.iter().enumerate() {
+            if column == &'*' {
+                let adj = get_adjecent_number(&engine, (x, y));
+                if adj.len() == 2 {
+                    total += adj[0] * adj[1];
+                }
             }
         }
     }
@@ -76,4 +100,28 @@ fn is_adjecent(engine: &Vec<Vec<char>>, position: (usize, usize)) -> bool {
         }
     }
     return false;
+}
+
+fn get_adjecent_number(engine: &Vec<Vec<char>>, position: (usize, usize)) -> Vec<u32> {
+    let mut result: Vec<u32> = vec![];
+    for y in -1..=1 {
+        if position.1 as i32 + y >= 0 && position.1 as i32 + y < engine.len() as i32 {
+            for x in -1..=1 {
+                if position.0 as i32 + x >= 0
+                    && position.0 as i32 + x < engine[(position.1 as i32 + y) as usize].len() as i32
+                {
+                    let cur_pos: (usize, usize) = (
+                        (position.0 as i32 + x) as usize,
+                        (position.1 as i32 + y) as usize,
+                    );
+                    if engine[cur_pos.1][cur_pos.0].is_digit(10) {
+                        result.push(get_num(engine, cur_pos));
+                    }
+                }
+            }
+        }
+    }
+    result.sort();
+    result.dedup();
+    result
 }
