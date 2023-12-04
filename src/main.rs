@@ -12,7 +12,7 @@ struct Cli {
     day: u8,
 
     /// part two
-    #[clap(default_value_t = false)]
+    #[clap(default_value_t = true)]
     #[clap(short, long)]
     part_two: bool,
 

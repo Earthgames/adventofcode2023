@@ -13,15 +13,17 @@ pub fn run(input: String) {
 
 pub fn runtwo(input: String) {
     let lines = input.as_str().lines();
-    let mut total: u32 = 0;
-    for line in lines {
+    let mut copies: Vec<u32> = vec![1; lines.clone().count()];
+    for (i, line) in lines.enumerate() {
         let (winning_numbers, owend_numbers) = get_numbers(line);
         let matching_numbers = get_matching_numbers(&winning_numbers, &owend_numbers);
-        if !matching_numbers.is_empty() {
-         total += 2_u32.pow(matching_numbers.len() as u32 -1)
+        for _ in 0..copies[i]{
+        for (number, _) in matching_numbers.iter().enumerate() {
+            copies[i+number + 1] += 1;
         }
     }
-    println!("{total}");
+    }
+    println!("{}", copies.iter().sum::<u32>() );
 }
 
 fn get_numbers(input: &str) -> (Vec<u32>, Vec<u32>){
