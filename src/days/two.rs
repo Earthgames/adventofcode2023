@@ -76,8 +76,8 @@ pub fn runtwo(input: String) {
 fn parse_int(input: &str) -> Option<u32> {
     input
         .chars()
-        .skip_while(|ch| !ch.is_digit(10))
-        .take_while(|ch| ch.is_digit(10))
+        .skip_while(|ch| !ch.is_ascii_digit())
+        .take_while(|ch| ch.is_ascii_digit())
         .fold(None, |acc, ch| {
             ch.to_digit(10).map(|b| acc.unwrap_or(0) * 10 + b)
         })

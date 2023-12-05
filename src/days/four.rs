@@ -44,7 +44,7 @@ fn get_numbers(input: &str) -> (Vec<u32>, Vec<u32>){
 fn get_matching_numbers(vec_source: &Vec<u32>, vec_match: &Vec<u32>) -> Vec<u32>{
     let mut result: Vec<u32> = vec![];
     for number in vec_match{
-        if vec_source.contains(&number)
+        if vec_source.contains(number)
             {
                 result.push(number.to_owned())
             }

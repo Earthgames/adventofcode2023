@@ -14,7 +14,7 @@ pub fn run(input: String) {
     for (y, row) in engine.iter().enumerate() {
         let mut not_checked = true;
         for (x, column) in row.iter().enumerate() {
-            if column.is_digit(10) {
+            if column.is_ascii_digit() {
                 if not_checked && is_adjecent(&engine, (x, y)) {
                     let num = get_num(&engine, (x, y));
                     total += num;
@@ -56,24 +56,20 @@ pub fn runtwo(input: String) {
 
 fn get_num(engine: &Vec<Vec<char>>, position: (usize, usize)) -> u32 {
     let mut result = "".to_string();
-    if !(position.0 as i32 - 1 < 0) && engine[position.1][position.0 - 1].is_digit(10) {
-        if !(position.0 as i32 - 2 < 0) {
-            if engine[position.1][position.0 - 2].is_digit(10) {
-                result.push(engine[position.1][position.0 - 2])
-            }
+    if position.0 as i32 > 0 && engine[position.1][position.0 - 1].is_ascii_digit() {
+        if position.0 as i32 - 2 >= 0 && engine[position.1][position.0 - 2].is_ascii_digit() {
+            result.push(engine[position.1][position.0 - 2])
         }
         result.push(engine[position.1][position.0 - 1]);
     }
     result.push(engine[position.1][position.0]);
 
-    if !(position.0 + 1 > engine[position.1].len())
-        && engine[position.1][position.0 + 1].is_digit(10)
+    if position.0 < engine[position.1].len()
+        && engine[position.1][position.0 + 1].is_ascii_digit()
     {
         result.push(engine[position.1][position.0 + 1]);
-        if !(position.0 + 2 > engine[position.1].len()) {
-            if engine[position.1][position.0 + 2].is_digit(10) {
-                result.push(engine[position.1][position.0 + 2])
-            }
+        if position.0 + 2 <= engine[position.1].len() && engine[position.1][position.0 + 2].is_ascii_digit() {
+            result.push(engine[position.1][position.0 + 2])
         }
     }
     result.parse::<u32>().unwrap()
@@ -91,7 +87,7 @@ fn is_adjecent(engine: &Vec<Vec<char>>, position: (usize, usize)) -> bool {
                         (position.1 as i32 + y) as usize,
                     );
                     if engine[cur_pos.1][cur_pos.0] != '.'
-                        && !(engine[cur_pos.1][cur_pos.0].is_digit(10))
+                        && !engine[cur_pos.1][cur_pos.0].is_ascii_digit()
                     {
                         return true;
                     }
@@ -99,7 +95,7 @@ fn is_adjecent(engine: &Vec<Vec<char>>, position: (usize, usize)) -> bool {
             }
         }
     }
-    return false;
+    false
 }
 
 fn get_adjecent_number(engine: &Vec<Vec<char>>, position: (usize, usize)) -> Vec<u32> {
@@ -114,7 +110,7 @@ fn get_adjecent_number(engine: &Vec<Vec<char>>, position: (usize, usize)) -> Vec
                         (position.0 as i32 + x) as usize,
                         (position.1 as i32 + y) as usize,
                     );
-                    if engine[cur_pos.1][cur_pos.0].is_digit(10) {
+                    if engine[cur_pos.1][cur_pos.0].is_ascii_digit() {
                         result.push(get_num(engine, cur_pos));
                     }
                 }
