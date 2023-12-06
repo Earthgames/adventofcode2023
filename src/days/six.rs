@@ -1,4 +1,4 @@
-use std::u64;
+use std::{u64, os::linux::raw};
 
 pub fn run(input: String) {
     let mut lines = input.as_str().lines();
@@ -25,6 +25,39 @@ pub fn run(input: String) {
         }
         result *= max_time - min_time;
     }
+    println!("{}", result);
+}
+
+pub fn runtwo(input: String) {
+    let mut lines = input.as_str().lines();
+
+    let times = get_input_vec(lines.next().unwrap());
+    let distances = get_input_vec(lines.next().unwrap());
+
+    let mut realtime: String = String::new();
+    for time in times {
+        realtime = format!("{}{}", realtime, time);
+    }
+    let max_time = realtime.parse::<u64>().unwrap();
+
+    let mut realdistance: String = String::new();
+    for distance in distances {
+        realdistance = format!("{}{}", realdistance, distance);
+    }
+    let distance = realdistance.parse::<u64>().unwrap();
+    
+    let race = Race {
+        max_time,
+        distance,
+    };
+
+    let mut result: u64 = 1;
+        let (mut min_time, max_time) = race.get_times(race.distance).unwrap();
+        if race.get_distance(min_time).unwrap() == race.distance {
+            min_time += 1;
+        }
+
+        result *= max_time - min_time;
     println!("{}", result);
 }
 
