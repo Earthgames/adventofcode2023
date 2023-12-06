@@ -1,4 +1,4 @@
-use std::{u64, os::linux::raw};
+use std::u64;
 
 pub fn run(input: String) {
     let mut lines = input.as_str().lines();
@@ -45,20 +45,15 @@ pub fn runtwo(input: String) {
         realdistance = format!("{}{}", realdistance, distance);
     }
     let distance = realdistance.parse::<u64>().unwrap();
-    
-    let race = Race {
-        max_time,
-        distance,
-    };
 
-    let mut result: u64 = 1;
-        let (mut min_time, max_time) = race.get_times(race.distance).unwrap();
-        if race.get_distance(min_time).unwrap() == race.distance {
-            min_time += 1;
-        }
+    let race = Race { max_time, distance };
 
-        result *= max_time - min_time;
-    println!("{}", result);
+    let (mut min_time, max_time) = race.get_times(race.distance).unwrap();
+    if race.get_distance(min_time).unwrap() == race.distance {
+        min_time += 1;
+    }
+
+    println!("{}", max_time - min_time);
 }
 
 struct Race {
