@@ -74,7 +74,7 @@ impl Race {
     }
 
     fn get_distance(&self, time: u64) -> Option<u64> {
-        let result = -1 * (time * time) as i64 + (self.max_time * time) as i64;
+        let result = -((time * time) as i64) + (self.max_time * time) as i64;
         if result < 0 {
             return None;
         }
