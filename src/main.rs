@@ -7,7 +7,7 @@ mod days;
 #[clap(propagate_version = true)]
 struct Cli {
     /// The day
-    #[clap(default_value_t = 6)]
+    #[clap(default_value_t = 7)]
     #[arg(short, long)]
     day: u8,
 
@@ -17,7 +17,7 @@ struct Cli {
     part_two: bool,
 
     /// use test input
-    #[clap(default_value_t = true)]
+    #[clap(default_value_t = false)]
     #[clap(short, long)]
     test: bool,
 }
@@ -47,7 +47,11 @@ fn main() {
         },
         6 => match cli.part_two {
             false => days::six::run(get_input(cli.day, cli.test)),
-            true => days::six::runtwo(get_input(cli.day, cli.test)), //TODO change
+            true => days::six::runtwo(get_input(cli.day, cli.test)),
+        },
+        7 => match cli.part_two {
+            false => days::seven::run(get_input(cli.day, cli.test)),
+            true => days::seven::runtwo(get_input(cli.day, cli.test)),
         },
         _ => print!("day not found"),
     }
