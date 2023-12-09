@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.0", features = ["derive"] } # command line interface
 colored = "2.0"                                   # color output and bold and other cool output for terminalkk
+num = "0.4"
