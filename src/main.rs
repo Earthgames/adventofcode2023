@@ -12,7 +12,7 @@ struct Cli {
     day: u8,
 
     /// part two
-    #[clap(default_value_t = false)]
+    #[clap(default_value_t = true)]
     #[clap(short, long)]
     part_two: bool,
 
@@ -63,7 +63,7 @@ fn main() {
         },
         10 => match cli.part_two {
             false => days::ten::run(get_input(cli.day, cli.test)),
-            true => days::nine::runtwo(get_input(cli.day, cli.test)),
+            true => days::ten::runtwo(get_input(cli.day, cli.test)),
         },
         _ => print!("day not found"),
     }

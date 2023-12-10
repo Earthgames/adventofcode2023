@@ -15,6 +15,158 @@ pub fn run(input: String) {
     println!("{}", total / 2);
 }
 
+pub fn runtwo(input: String) {
+    let (grid, start_pos) = prase_input(input);
+    let (mut current_pos, mut next_dir) =
+        move_to(start_pos, grid[start_pos.1][start_pos.0][0], &grid);
+    let mut clean_grid: Vec<Vec<u8>> = vec![vec![0; grid[0].len()]; grid.len()];
+    clean_grid[start_pos.1][start_pos.0] = 1;
+    loop {
+        if current_pos == start_pos {
+            break;
+        }
+        clean_grid[current_pos.1][current_pos.0] = 1;
+        (current_pos, next_dir) = move_to(current_pos, next_dir, &grid);
+    }
+
+    'big: for (y, row) in clean_grid.iter().enumerate() {
+        for (x, num) in row.iter().enumerate() {
+            if num == &1 {
+                current_pos = (x, y);
+                break 'big;
+            }
+        }
+    }
+    let start_pos = current_pos;
+    next_dir = East;
+    (current_pos, next_dir) = move_to(start_pos, next_dir, &grid);
+    loop {
+        if current_pos == start_pos {
+            break;
+        }
+
+        match next_dir {
+            North => {
+                if current_pos.0 < grid[0].len() - 1
+                    && clean_grid[current_pos.1][current_pos.0 + 1] == 0
+                {
+                    clean_grid[current_pos.1][current_pos.0 + 1] = 2;
+                }
+            }
+            South => {
+                if current_pos.0 != 0 && clean_grid[current_pos.1][current_pos.0 - 1] == 0 {
+                    clean_grid[current_pos.1][current_pos.0 - 1] = 2
+                }
+            }
+            West => {
+                if current_pos.1 != 0 && clean_grid[current_pos.1 - 1][current_pos.0] == 0 {
+                    clean_grid[current_pos.1 - 1][current_pos.0] = 2;
+                }
+            }
+            East => {
+                if current_pos.1 < grid.len() - 1
+                    && clean_grid[current_pos.1 + 1][current_pos.0] == 0
+                {
+                    clean_grid[current_pos.1 + 1][current_pos.0] = 2
+                }
+            }
+        }
+
+        clean_grid[current_pos.1][current_pos.0] = 1;
+        (current_pos, next_dir) = move_to(current_pos, next_dir, &grid);
+    }
+    let start_pos = current_pos;
+    next_dir = South;
+    (current_pos, next_dir) = move_to(start_pos, next_dir, &grid);
+    loop {
+        if current_pos == start_pos {
+            break;
+        }
+
+        match next_dir {
+            North => {
+                if current_pos.0 != 0 && clean_grid[current_pos.1][current_pos.0 - 1] == 0 {
+                    clean_grid[current_pos.1][current_pos.0 - 1] = 2
+                }
+            }
+            South => {
+                if current_pos.0 < grid[0].len() - 1
+                    && clean_grid[current_pos.1][current_pos.0 + 1] == 0
+                {
+                    clean_grid[current_pos.1][current_pos.0 + 1] = 2;
+                }
+            }
+            West => {
+                if current_pos.1 < grid.len() - 1
+                    && clean_grid[current_pos.1 + 1][current_pos.0] == 0
+                {
+                    clean_grid[current_pos.1 + 1][current_pos.0] = 2
+                }
+            }
+            East => {
+                if current_pos.1 != 0 && clean_grid[current_pos.1 - 1][current_pos.0] == 0 {
+                    clean_grid[current_pos.1 - 1][current_pos.0] = 2;
+                }
+            }
+        }
+
+        clean_grid[current_pos.1][current_pos.0] = 1;
+        (current_pos, next_dir) = move_to(current_pos, next_dir, &grid);
+    }
+    for (y, line) in clean_grid.clone().iter().enumerate() {
+        for (x, num) in line.iter().enumerate() {
+            if num == &2 {
+                fill((x, y), &mut clean_grid);
+            }
+        }
+    }
+    let mut total = 0;
+    for line in &clean_grid {
+        for char in line {
+            if char == &2 {
+                total += 1;
+            }
+            print!("{}", char);
+        }
+        println!();
+    }
+    println!();
+    println!("{}", total);
+}
+/*
+fn real_direction(
+    direction: Direction,
+    current_pos: (usize, usize),
+    grid: &Vec<Vec<[Direction; 2]>>,
+) -> bool {
+    match direction {
+        North => current_pos.1 != 0,
+        South => current_pos.1 < grid.len() - 1,
+        West => current_pos.0 != 0,
+        East => current_pos.0 < grid[0].len() - 1,
+    }
+} */
+
+fn fill(current_pos: (usize, usize), clean_grid: &mut Vec<Vec<u8>>) {
+    if current_pos.1 != 0 && clean_grid[current_pos.1 - 1][current_pos.0] == 0 {
+        clean_grid[current_pos.1 - 1][current_pos.0] = 2;
+        fill((current_pos.0, current_pos.1 - 1), clean_grid);
+    }
+    if current_pos.1 < clean_grid.len() - 1 && clean_grid[current_pos.1 + 1][current_pos.0] == 0 {
+        clean_grid[current_pos.1 + 1][current_pos.0] = 2;
+        fill((current_pos.0, current_pos.1 + 1), clean_grid);
+    }
+    if current_pos.0 != 0 && clean_grid[current_pos.1][current_pos.0 - 1] == 0 {
+        clean_grid[current_pos.1][current_pos.0 - 1] = 2;
+        fill((current_pos.0 - 1, current_pos.1), clean_grid);
+    }
+    if current_pos.0 < clean_grid[0].len() - 1 && clean_grid[current_pos.1][current_pos.0 + 1] == 0
+    {
+        clean_grid[current_pos.1][current_pos.0 + 1] = 2;
+        fill((current_pos.0 + 1, current_pos.1), clean_grid);
+    }
+}
+
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 enum Direction {
     North,
@@ -113,29 +265,29 @@ fn is_valid_dir(
     grid: &Vec<Vec<[Direction; 2]>>,
 ) -> bool {
     match direction {
-        Direction::North => {
+        North => {
             if start_pos.1 != 0 {
                 return grid[start_pos.1 - 1][start_pos.0].contains(&South);
             }
-            return false;
+            false
         }
-        Direction::South => {
+        South => {
             if start_pos.1 < grid.len() - 1 {
                 return grid[start_pos.1 + 1][start_pos.0].contains(&North);
             }
-            return false;
+            false
         }
-        Direction::West => {
+        West => {
             if start_pos.0 != 0 {
                 return grid[start_pos.1][start_pos.0 - 1].contains(&East);
             }
-            return false;
+            false
         }
-        Direction::East => {
+        East => {
             if start_pos.0 < grid[0].len() - 1 {
                 return grid[start_pos.1][start_pos.0 + 1].contains(&West);
             }
-            return false;
+            false
         }
     }
 }
