@@ -66,8 +66,8 @@ pub fn runtwo(input: String) {
         total += galaxy[0].0.abs_diff(galaxy[1].0);
         total += galaxy[0].1.abs_diff(galaxy[1].1);
     }
-    let x_max = new_galaxies.iter().fold(0, |acc, x| acc.max(x.0));
-    let y_max = new_galaxies.iter().fold(0, |acc, y| acc.max(y.1));
+    // let x_max = new_galaxies.iter().fold(0, |acc, x| acc.max(x.0));
+    // let y_max = new_galaxies.iter().fold(0, |acc, y| acc.max(y.1));
     // for y in 0..=y_max {
     //     for x in 0..=x_max {
     //         if new_galaxies.contains(&(x, y)) {
